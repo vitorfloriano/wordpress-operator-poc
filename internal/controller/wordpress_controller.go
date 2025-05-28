@@ -19,6 +19,7 @@ package controller
 import (
 	"context"
 
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -47,9 +48,22 @@ type WordpressReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.20.0/pkg/reconcile
 func (r *WordpressReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = log.FromContext(ctx)
+	log := log.FromContext(ctx)
 
-	// TODO(user): your logic here
+	// Fetch the Busybox instance
+	busybox := &examplecomv1alpha1.Busybox{}
+	err := r.Get(ctx, req.NamespacedName, busybox)
+	if err != nil {
+		if apierrors.IsNotFound(err) {
+
+			log.Info("busybox resource not found. Ignoring since object must be deleted")
+			return ctrl.Result{}, nil
+		}
+		log.Error(err, "Failed to get busybox")
+		return ctrl.Result{}, err
+	}
+
+	log.Info("busybox reconciled")
 
 	return ctrl.Result{}, nil
 }
