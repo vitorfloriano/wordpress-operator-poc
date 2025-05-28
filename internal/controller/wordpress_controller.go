@@ -50,20 +50,19 @@ type WordpressReconciler struct {
 func (r *WordpressReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := log.FromContext(ctx)
 
-	// Fetch the Busybox instance
-	busybox := &examplecomv1alpha1.Busybox{}
-	err := r.Get(ctx, req.NamespacedName, busybox)
+	// Fetch the Wordpress instance
+	wordpress := &examplecomv1.Wordpress{}
+	err := r.Get(ctx, req.NamespacedName, wordpress)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
-
-			log.Info("busybox resource not found. Ignoring since object must be deleted")
+			log.Info("wordpress resource not found. Ignoring since object must be deleted")
 			return ctrl.Result{}, nil
 		}
-		log.Error(err, "Failed to get busybox")
+		log.Error(err, "Failed to get wordpress")
 		return ctrl.Result{}, err
 	}
 
-	log.Info("busybox reconciled")
+	log.Info("wordpress reconciled")
 
 	return ctrl.Result{}, nil
 }
