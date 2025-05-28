@@ -7,4 +7,14 @@ layout:
 - go.kubebuilder.io/v4
 projectName: wordpress-operator-poc
 repo: github.com/vitorfloriano/wordpress-operator-poc
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: my.domain
+  group: example.com
+  kind: Wordpress
+  path: github.com/vitorfloriano/wordpress-operator-poc/api/v1
+  version: v1
 version: "3"
